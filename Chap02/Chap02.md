@@ -14,6 +14,11 @@
     - [2.63](#263)
     - [2.64](#264)
     - [2.65](#265)
+    - [2.66](#266)
+    - [2.67](#267)
+    - [2.68](#268)
+    - [2.69](#269)
+    - [2.70](#270)
 
 ## Overview 
 This chapter gives a detailed description of how data is arraged in system.
@@ -96,10 +101,60 @@ Fill in code for the following C functions. Functionsrlperforms a logical rights
 Write code to implement the following function:
 Your function should follow the bit-level integer coding rules (page 164), except that you may assume that data type int has w = 32 bits.
 
-> ./code/odd_ones.c
+> ./code/any_odd_one.c
 
 ### 2.65
 Write code to implement the following function:
 Your code should contain a total of at most 12 arithmetic, bitwise, and logical operations.
 
+> ./code/odd_ones.c
+
+### 2.66
+
 > ./code/left_most_ones.c
+
+### 2.67
+You are given the task of writing a procedure int_size_is_32() that yields 1 when run on a machine for which an int is 32 bits, and yields 0 otherwise. You are not allowed to use the sizeof operator. Here is a first attempt:
+```c
+/* The following code does not run properly on some machines */
+int bad_int_size_is_32() 
+{
+/* Set most significant bit (msb) of 32-bit machine */
+int set_msb = 1 << 31;
+/* Shift past msb of 32-bit word */
+int beyond_msb = 1 << 32;
+/* set_msb is nonzero when word size >= 32
+beyond_msb is zero when word size <= 32 */
+return set_msb && !beyond_msb;
+
+}
+```
+When compiled and run on a 32-bit SUN SPARC, however, this procedure
+returns 0. The following compiler message gives us an indication of the problem:
+```
+warning: left shift count >= width of type
+```
+A. In what way does our code fail to comply with the C standard?
+B. Modify the code to run properly on any machine for which data type int is at least 32 bits.
+C. Modify the code to run properly on any machine for which data type int is
+at least 16 bits.
+
+A: The shift steps are more than the width of `int` in the machine. The first `1` is overflowed.
+B. C.
+
+> ./code/int_size_32.c
+
+### 2.68
+Write code for a function with the following prototype:
+
+> ./code/lower_one_mask.c
+
+### 2.69
+Write code for a function with the following prototype:
+
+> ./code/rotate_left.c
+
+### 2.70
+Write code for the function with the following prototype:
+
+> ./code/fits_bits.c
