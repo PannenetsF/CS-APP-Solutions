@@ -19,6 +19,11 @@
     - [2.68](#268)
     - [2.69](#269)
     - [2.70](#270)
+    - [2.71](#271)
+    - [2.72](#272)
+    - [2.73](#273)
+    - [2.74](#274)
+    - [2.75](#275)
 
 ## Overview 
 This chapter gives a detailed description of how data is arraged in system.
@@ -158,3 +163,47 @@ Write code for a function with the following prototype:
 Write code for the function with the following prototype:
 
 > ./code/fits_bits.c
+
+### 2.71
+You just started working for a company that is implementing a set of procedures to operate on a data structure where 4 signed bytes are packed into a 32-bit unsigned. Bytes within the word are numbered from 0 (least significant) to 3(most significant). You have been assigned the task of implementing a function for a machine using two’s-complement arithmetic and arithmetic right shifts with the following prototype:
+That is, the function will extract the designated byte and sign extend it to be
+a 32-bit int.
+Your predecessor (who was fired for incompetence) wrote the following code:
+
+A: The `xbyte` just takes the byte but doesn't extend it to a signed byte.
+B. See the `new_xbyte' 
+
+> ./code/xbyte.c
+
+### 2.72
+You are given the task of writing a function that will copy an integer val into a buffer buf, but it should do so only if enough space is available in the buffer.
+
+This code makes use of the library function memcpy. Although its use is a bit artificial here, where we simply want to copy an int, it illustrates an approach commonly used to copy larger data structures.
+You carefully test the code and discover that it always copies the value to the buffer, even when maxbytes is too small.
+A. Explain why the conditional test in the code always succeeds. Hint: The sizeof operator returns a value of type size_t.
+
+The type `size_t` is `unsigned long`, so the expression will be implicitly turned to an unsigned value.
+
+B. Show how you can rewrite the conditional test to make it work properly.
+
+> ./code/copy_int.c
+
+### 2.73
+
+Instead of overflowing the way normal two’s-complement addition does, saturating addition returns TMax when there would be positive overflow, and TMin when there would be negative overflow. Saturating arithmetic is commonly used in programs that perform digital signal processing.
+
+> ./code/saturating_add.c
+
+### 2.74
+
+> ./code/tsub_ok.c
+
+### 2.75
+
+In fact, the difference is signed `*` ignores the highest bits.
+So 
+```c
+unsigned unsigned_high_prod(unsigned x, unsigned y) {
+  return (unsigned) signed_high_prod(x, y) + (x >> 31) * y + x * (y >> 31);
+}
+```
