@@ -24,6 +24,11 @@
     - [2.73](#273)
     - [2.74](#274)
     - [2.75](#275)
+    - [2.76](#276)
+    - [2.77](#277)
+    - [2.78](#278)
+    - [2.79](#279)
+    - [2.80](#280)
 
 ## Overview 
 This chapter gives a detailed description of how data is arraged in system.
@@ -207,3 +212,37 @@ unsigned unsigned_high_prod(unsigned x, unsigned y) {
   return (unsigned) signed_high_prod(x, y) + (x >> 31) * y + x * (y >> 31);
 }
 ```
+
+### 2.76
+According to the library documentation, “The calloc function allocates memory for an array of nmemb elements of size bytes each. The memory is set to zero. If nmemb or size is zero, then calloc returns NULL.”
+
+> ./code/calloc.c
+
+### 2.77
+Suppose we are given the task of generating code to multiply integer variable x by various different constant factors K. To be efficient, we want to use only the operations +, -, and <<. For the following values of K, write C expressions to perform the multiplication using at most three operations per expression.
+A. K = 17 = (1 << 4 + 1)
+B. K = −7 = (1 - (1 << 3))
+C. K = 60 = (1 << 6 - 1 << 2)
+D. K = −112 = (1 << 4 - 1 << 7)
+
+### 2.78
+Write code for a function with the following prototype:
+
+> ./code/div_pow2.c
+
+### 2.79
+Write code for a function mul3div4 that, for integer argument x, computes 3 ∗ x/4 but follows the bit-level integer coding rules (page 164). Your code should replicate the fact that the computation 3*x can cause overflow.
+
+```c
+#define Foo(x) (x >> 2 + x >> 1)
+```
+
+### 2.80
+Write code for a function threefourths that, for integer argument x, computes the value of 3/4 * x, rounded toward zero. It should not overflow.
+
+```c
+#define Foo(x) (x >> 1 + x >> 2)
+```
+
+
+

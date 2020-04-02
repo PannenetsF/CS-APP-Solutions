@@ -2,7 +2,8 @@
     "files.associations": {
         "inttypes.h": "c",
         "stdio.h": "c",
-        "limits.h": "c"
+        "limits.h": "c",
+        "cstdlib": "cpp"
     },
     "editor.formatOnSave": true
 }
