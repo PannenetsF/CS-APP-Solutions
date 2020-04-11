@@ -10,6 +10,12 @@
       - [Arithmetic and Logical Operations](#arithmetic-and-logical-operations)
         - [Load effective address](#load-effective-address)
         - [Unary and Binary Operations](#unary-and-binary-operations)
+      - [Controll Structure](#controll-structure)
+        - [Condition Code](#condition-code)
+        - [Access to condition codes](#access-to-condition-codes)
+        - [Jump](#jump)
+        - [Conditional Move](#conditional-move)
+        - [Loop](#loop)
     - [Homework](#homework)
 
 ## Contents
@@ -101,6 +107,54 @@ Multiply and divide of Oct word.
 `divq S`: (R[%rdx], R[%rax]) <- S / R[%rax] (unsigned) 
 R[%rdx] gets the mod, and R[%rax] gets the ans.
 
+#### Controll Structure
 
+##### Condition Code
+
+`CF`: Carry Flag. To check if carry occurs in recent operation.
+`ZF`: Zero Flag. The most recent operation yielded zero.
+`SF`: Sign Flag. Negative value generated.
+`OF`: Overflow Flag.
+
+**Note**: Arithmetic operations will set flags while something like `;eaq` won't.
+
+Some operations alert the flag registers only:
+`cmp_ s1, s2`: check the value of (s2 - s1).
+
+Let's have a look:
+```c
+case(s2-s1):
+  == 0: ZF = 1; SF = 0;
+  <0:   SF = 1; ZF = 0;
+  >0:   SF = 0; ZF = 0;
+```
+
+`test_ s1, s2`: check the value of (s2 & s1).
+
+##### Access to condition codes
+
+Conditional Set: Only to the low-order byte.
+`set_`
+The suffix vary from the first character of equal, not equal, signed, not signed, greater, not greater...
+![](img/set.png)
+
+##### Jump
+
+With `jump` you can realize loop and switch and recursion.
+`jmp .lable`: jump to a place named `.lable` unconditionally.
+`jmp *%reg`: jump to certain memory
+`jmp *(%reg)`: jump to some register
+
+And jump in some condition:
+![](img/jmp.png)
+
+##### Conditional Move
+Move some data with conditional codes.
+
+-[](img/cmov.png)
+
+##### Loop
+
+With jump and conditional codes, loop is easy to implement. 
 
 ### Homework
