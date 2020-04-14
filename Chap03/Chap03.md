@@ -16,6 +16,11 @@
         - [Jump](#jump)
         - [Conditional Move](#conditional-move)
         - [Loop](#loop)
+        - [Switch](#switch)
+      - [Procedures](#procedures)
+        - [Runtime Stack](#runtime-stack)
+        - [Controll Transfer](#controll-transfer)
+        - [Data Transfer](#data-transfer)
     - [Homework](#homework)
 
 ## Contents
@@ -151,10 +156,58 @@ And jump in some condition:
 ##### Conditional Move
 Move some data with conditional codes.
 
+And in most cases, conditional move are better than conditional jump.
+
 -[](img/cmov.png)
 
 ##### Loop
 
 With jump and conditional codes, loop is easy to implement. 
+
+##### Switch
+
+First you compute the statement to be used, and then treat it as an index of `jmp`.
+
+The index uses the concept of jump table.
+
+```asm
+  .section    .rodata
+  .align      8
+.L4:
+  .quad       .L3
+  .quad       .L5
+  .quad       .L6
+```
+
+And you can the index in this way:
+
+```
+jmp   *.L4(, %rsi, 8)
+```
+
+#### Procedures
+
+A procedure can be simply considered as a function. 
+- Before the machine handle the function the PC gets the function's address. After calling, the PC gets the address after it.
+- Functions may have some parameters and may return a value.
+- Fuctions should be able to allocate and deallocate memory.
+
+##### Runtime Stack
+
+If the space in registers cannot meet the need of procedure, it will allocate some memory in stack, which is called stack fram.
+
+If a procedure Q is called in a procedure P, the cpu will push the return address into stack to imply where P should continue.
+
+##### Controll Transfer
+
+If calling sth, the stack address will decrease by 8 or more. After that, resume the origin address.
+
+##### Data Transfer
+
+With specific registers, we can transfer data into procedure.
+
+![](img/para_reg.png)
+
+If too many parameters needed that registers are not enough, we need stack for para_7 to para_n. And para_7 is at stack top.
 
 ### Homework
