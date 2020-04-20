@@ -21,6 +21,12 @@
         - [Runtime Stack](#runtime-stack)
         - [Controll Transfer](#controll-transfer)
         - [Data Transfer](#data-transfer)
+        - [Local Storage on the stack](#local-storage-on-the-stack)
+        - [Local Storage in the regs](#local-storage-in-the-regs)
+        - [Recursive](#recursive)
+      - [Array Allocation and access](#array-allocation-and-access)
+        - [Rules](#rules)
+        - [Operations](#operations)
     - [Homework](#homework)
 
 ## Contents
@@ -209,5 +215,42 @@ With specific registers, we can transfer data into procedure.
 ![](img/para_reg.png)
 
 If too many parameters needed that registers are not enough, we need stack for para_7 to para_n. And para_7 is at stack top.
+
+
+##### Local Storage on the stack
+
+When the regs are not enough for paras, we need  stack to hold local varibles.
+
+When you call it, it will allocate some space on the stack, and it will be freed after call.
+
+##### Local Storage in the regs
+
+The regs are the only to be shared to any procedure.
+
+So what's the difference between `callee-saved` and `caller saved`?
+
+`callee-saved` means that, if you call a procedure and you have to use some regs, you should save the origin value to stack and restore it after call.
+
+`caller-saved` means you cannot ask the callee to do the job, you should do it yourself.
+
+##### Recursive
+
+It's almost the same with loop in asm. But recursive procedure will have a large stack usage.
+
+#### Array Allocation and access
+
+##### Rules
+
+As we know data type has size varying from 8, 16, 32, 64, and the nature of an array is address and bias.
+
+You can simply store the base address, the use the `(%reg1, %reg2, scale)` manner to access an element.
+
+##### Operations
+
+Apply `mov_` and `leaq` to get a pointer.
+Apply `(%reg, %reg, scale)` to get a pointer dereference.
+
+
+
 
 ### Homework
