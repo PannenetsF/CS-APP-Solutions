@@ -27,7 +27,17 @@
       - [Array Allocation and access](#array-allocation-and-access)
         - [Rules](#rules)
         - [Operations](#operations)
+      - [Struct and Union](#struct-and-union)
+      - [Alignment](#alignment)
+      - [Overflow](#overflow)
+      - [Varible Size Array](#varible-size-array)
+      - [Float](#float)
     - [Homework](#homework)
+      - [3.58](#358)
+      - [3.59](#359)
+      - [3.60](#360)
+      - [3.61](#361)
+      - [3.62](#362)
 
 ## Contents
 
@@ -248,9 +258,163 @@ You can simply store the base address, the use the `(%reg1, %reg2, scale)` manne
 ##### Operations
 
 Apply `mov_` and `leaq` to get a pointer.
-Apply `(%reg, %reg, scale)` to get a pointer dereference.
+Apply `(%reg, %reg, scale)` to get a pointer de-reference.
+
+Similiarly, if an array is made up of sub-arrays, the bias turns to be a bigger one.
+
+Also, even if an array is indexed by a expression which always changes, the idea of bias still works. However, the index has to do with regs and multiplication which may cause more time consumption that before.
+
+#### Struct and Union
+
+Struct could be treated as a BIG int or char, because though it takes more space, pointer or address still works like before and the inside bias is controlled by complier.
+
+Union's gramma is the same as struct, but the union has no inside struct. The space union take is what the largest one in the union takes. Union's pointer has no type check for it's mean to serve as a flexble type.
+
+#### Alignment
+
+The address of any data should be multiple of some value like 2, 4, 8 bytes. If a 64-bit or 8-byte double is stored in two elements of 8-byte, cpu will take 2 times to read or write it. So if a struct with size {4, 1, 4}, complier will allocate a {4, 1, 3, 4} to match the 4-byte align.
+
+#### Overflow
+
+C does not check the reference of a pointer, so if one pointer mistakenly gets into stack which should not be affected, a LOGIC EREOR will take place. 
+
+#### Varible Size Array
+
+Stack.
+
+#### Float 
+
+Like the integers' registers, float num also has a parted reg struct, which has 64bit and 32bit options. Besides, mov- structions are provided and the type transformation is a important part.
+
+When we use float numbers, there is no immediate number for the bits of float is not like int's. 
+
 
 
 
 
 ### Homework
+
+#### 3.58 
+
+```c
+long decode2(long x, long y, long z) {
+  x = x * (y - z);
+  long ret = y;
+  if (y % 2) ret = ~x;
+  else ret = x;
+  return ret;
+}
+```
+
+#### 3.59
+
+
+
+```
+store_prod:
+movq  %rdx, %rax  
+cqto              
+// rdx, rax = (int128) y
+movq  %rsi, %rcx
+sarq  $63, %rcx
+// rcx, rsi = (int128) x
+imulq %rax, %rcx
+// rcx = y_l * x_h
+imulq %rsi, %rdx
+// rdx = y_h * x_l
+addq  %rdx, %rcx
+// rcx = (x_l * y_h + x_h * y_l)_l
+mulq  %rsi
+// rdx = (x_l * y_l)_h
+addq  %rcx, %rdx
+// rdx = (x * y)_h
+movq  %rax, (%rdi)
+movq  %rdx, 8(%rdi)
+// write to pointer
+ret
+```
+
+#### 3.60
+
+```
+// long loop(long x, int n)
+// x in %rdi, n in %esi
+// rdx -> mask;
+// r8 -> result
+loop:
+  movl  %esi, %ecx // ecx = n
+  movl  $1, %edx   // edx = 1
+  movl  $0, %eax   // eax = 0
+  jmp .L2
+
+.L3:  
+  movq  %rdi, %r8 // r8 = x
+  andq  %rdx, %r8 // r8 = x & rdx
+  orq   %r8, %rax // rax = r8 | rax
+  salq  %cl, %rdx // rdx <<= n & 0xff
+
+.L2:
+  testq %rdx, %rdx // test rdx
+  jne .L3 // if rdx != 0, jump
+  rep; ret
+
+```
+A: x : rdi; n : esi; result : r8; mask : rdx;
+B: result = 0, mask = 1;
+C: mask != 0
+D: result = result & mask;
+E:
+```c
+long loop(long x, int n) {
+  long result = 0;
+  long mask;
+  for (mask = 0; mask != 0; mask = mask << (n & 0xff)) {
+    result |= mask;
+  }
+  return result;
+}
+```
+
+#### 3.61
+
+```c
+long cread_alt(long *xp) {
+  return ((xp == NULL)? 0 : *xp);
+}
+```
+
+#### 3.62
+
+```
+typedef enum {MODE_A, MODE_B, MODE_C, MODE_D, MODE_E} mode_t;
+
+long switch3(long *p1, long *p2, mode_t action) 
+{
+  long result = 0;
+  swtich (action) {
+    case MODE_E:
+      result = 27;
+      break;
+    case MODE_A:
+      result = *p2;
+      *p2 = *p1;
+      break;
+    case MODE_B:
+      result = *p1 + *p2;
+      *p1 = result;
+      break;
+    case MODE_C:
+      *p1 = 59;
+      result = *p2;
+      break;
+    case MODE_D:
+      *p1 = *p2;
+      result = 27 | ((int)(*p2));
+    default:
+      result = 12;
+      break;
+
+  }
+  return result;
+}
+```
