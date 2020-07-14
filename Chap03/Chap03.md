@@ -38,6 +38,15 @@
       - [3.60](#360)
       - [3.61](#361)
       - [3.62](#362)
+      - [3.63](#363)
+      - [3.64](#364)
+      - [3.65](#365)
+      - [3.66](#366)
+      - [3.67](#367)
+      - [3.68](#368)
+      - [3.69](#369)
+      - [3.70](#370)
+      - [3.71](#371)
 
 ## Contents
 
@@ -418,3 +427,125 @@ long switch3(long *p1, long *p2, mode_t action)
   return result;
 }
 ```
+
+#### 3.63
+
+I feel strange because ... some case has no break?
+
+```c
+long switch_prob(long x, long n) {
+  long result = x;
+  switch(n) { 
+    case 0x3c:
+      result = 8 * x;
+      break;
+    case 0x3d:
+      result = x + 0x4b;
+      break;
+    case 0x3e:
+      result = 8 * x;
+      break;
+    case 0x3f:
+      result = x >> 3;
+      break;
+    case 0x40:
+      result = x << 4;
+      result -= x;
+      x = result;
+    case 0x41:
+      x = x * x;
+    default:
+      result = x + 0x4b;
+  }
+}
+```
+
+#### 3.64
+
+```c
+A[i][j][k] = *(A + i * S * T + j * T + k)
+```
+
+```
+ret = *(A + 8 * (65 * i0 + 13 * j0 + k0))
+```
+
+so T = 12, S = 3, R = 3640/S/T/8 = 7
+
+#### 3.65
+
+%rdx -> &(A[i][j])
+%rax -> &(A[j][i])
+M = 15
+
+#### 3.66
+
+NC(n) = 4 n + 1
+NR(n) = 3 * n
+
+#### 3.67
+
+A: 
+
+rsp1 = rsp0 - 104
+
+rsp1      : x
+rsp1 + 8  : y
+rsp1 + 16 : (24 + rsp1)
+rsp1 + 24 : z
+
+B:
+
+rdi       : rsp1 + 64
+
+C: 
+
+from the stack
+
+D:
+
+set value based on the rdi which is already pointing at a space in the stack.
+
+E:
+
+F:
+
+stack pointer could serve as a base for sub-process.
+
+#### 3.68
+
+B = 2
+A = 12
+
+#### 3.69
+
+typedef struct {
+  long long idx;
+  long x[3]
+} a
+
+CNT = 120 / 40 = 3
+
+#### 3.70 
+
+A. 0, 8, 0; 8;
+B. 16
+C. 
+rax = *(up + 1) // y or *next
+rdx = *(next)
+rdx = *(next->p)
+rdx = rdx - (*(up->next)).y
+
+`up.x = *(up->next->p) - (*(up->next)).y`
+
+#### 3.71
+
+overflown buf will be read by next function which use the buf.
+
+
+
+
+
+
+
+

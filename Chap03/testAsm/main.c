@@ -1,12 +1,19 @@
-#include <stdio.h>
+typedef struct {
+  long a[2];
+  long *p;
+} strA;
 
-void multstore(long, long, long *);
+typedef struct {
+  long u[2];
+  long q;
+} strB;
 
-int main() {
-  long d;
-  multstore(2, 3, &d);
-  printf("2 * 3 -> %d", d);
-  return 0;
+strB process(strA s) {
+  strB r;
+  r.u[0] = s.a[1];
+  r.u[1] = s.a[0];
+  r.q = *(s.p);
+  return r;
 }
 
-long mult2(long a, long b) { return a * b; }
+long eval(long x, long y, long z) 
