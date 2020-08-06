@@ -15,7 +15,7 @@ class DataMemIo(implicit p: Parameters) extends CoreBundle()(p) {
 
 class DataMem(implicit val p: Parameters) extends Module with CoreParams {
   val io = IO(new DataMemIo)
-  val mem = Mem(xlen, UInt(xlen.W))
+  val mem = Mem(1 << xlen, UInt(xlen.W))
   when (io.memRead)  {
     io.rdata := mem(io.addr)
   }
