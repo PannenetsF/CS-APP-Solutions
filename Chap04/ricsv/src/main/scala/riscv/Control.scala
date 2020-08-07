@@ -26,11 +26,11 @@ object Control {
   val M2RegY = Y
 
   // ALUOp
-  val ALUOpX  = BitPat("b00")
-  val ALUOp00 = BitPat("b00")
-  val ALUOp01 = BitPat("b01")
-  val ALUOp10 = BitPat("b10")
-  val ALUOp11 = BitPat("b11")
+  val ALUOpX  = BitPat.bitPatToUInt(BitPat("b00"))
+  val ALUOp00 = BitPat.bitPatToUInt(BitPat("b00"))
+  val ALUOp01 = BitPat.bitPatToUInt(BitPat("b01"))
+  val ALUOp10 = BitPat.bitPatToUInt(BitPat("b10"))
+  val ALUOp11 = BitPat.bitPatToUInt(BitPat("b11"))
 
   // MemWrite
   val MWriteX = N
@@ -52,8 +52,8 @@ object Control {
 import Control._
 import ISA._
 
-class singleClkControlIo(implicit p: Parameters) extends CoreBundle()(p) {
-  val inst = Input(UInt(xlen.W))
+class singleClkControlIo extends CoreBundle {
+  val inst = Input(UInt(32.W))
   val aluSrc = Output(Bool())
   val mem2Reg = Output(Bool())
   val regWrite = Output(Bool())

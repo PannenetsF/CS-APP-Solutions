@@ -5,7 +5,7 @@ import chisel3._
 import chisel3.util.Cat
 
 
-class InstMemIo(implicit p: Parameters) extends CoreBundle()(p) {
+class InstMemIo extends CoreBundle {
   val raddr = Input(UInt(xlen.W))
   val instFull = Output(UInt(32.W))
   val instRead1 = Output(UInt(5.W))
@@ -14,7 +14,7 @@ class InstMemIo(implicit p: Parameters) extends CoreBundle()(p) {
   val instAluCtrl = Output(UInt(4.W))
 }
 
-class InstMem(implicit val p: Parameters) extends Module with CoreParams {
+class InstMem extends Module with CoreParams {
   val io = IO(new InstMemIo)
   val mem = Mem(1 << xlen, UInt(32.W))
 

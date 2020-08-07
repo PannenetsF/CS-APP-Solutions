@@ -4,7 +4,7 @@ import chisel3._
 import chisel3.util._
 import freechips.rocketchip.config.Parameters
 
-class RegFileIo(implicit p: Parameters) extends CoreBundle()(p) {
+class RegFileIo extends CoreBundle {
   val raddr1 = Input(UInt(5.W))
   val raddr2 = Input(UInt(5.W))
   val waddr = Input(UInt(5.W))
@@ -14,7 +14,7 @@ class RegFileIo(implicit p: Parameters) extends CoreBundle()(p) {
   val we = Input(Bool())
 }
 
-class RegFile(implicit val p: Parameters) extends Module with CoreParams {
+class RegFile extends Module with CoreParams {
   val io = IO(new RegFileIo)
   val regs = Mem(32, UInt(xlen.W))
 

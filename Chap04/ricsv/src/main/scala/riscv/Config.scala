@@ -11,24 +11,24 @@ case object R2LEN extends Field[Int] // read 2 width
 case object WLEN extends Field[Int] // write width
 
 abstract trait CoreParams {
-  implicit val p: Parameters
-  val xlen = p(XLEN)
-  val ilen = p(ILEN)
-  val clen = p(CLEN)
-  val r1len = p(R1LEN)
-  val r2len = p(R2LEN)
-  val wlen = p(WLEN)
+//  implicit val p: Parameters
+  val xlen = 64
+//  val ilen = p(ILEN)
+//  val clen = p(CLEN)
+//  val r1len = p(R1LEN)
+//  val r2len = p(R2LEN)
+//  val wlen = p(WLEN)
 }
 
-abstract class CoreBundle(implicit p: Parameters) extends Bundle with CoreParams
-
-class RVConfig extends Config(
-  (site, here, up) => {
-    case XLEN => 64
-    case ILEN => 32
-    case CLEN => 7
-    case R1LEN => 5
-    case R2LEN => 5
-    case WLEN => 5
-  }
-)
+abstract class CoreBundle extends Bundle with CoreParams
+//
+//class RVConfig extends Config(
+//  (site, here, up) => {
+//    case XLEN => 64
+//    case ILEN => 32
+//    case CLEN => 7
+//    case R1LEN => 5
+//    case R2LEN => 5
+//    case WLEN => 5
+//  }
+//)
