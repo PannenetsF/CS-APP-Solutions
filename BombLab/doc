@@ -1,0 +1,124 @@
+1. set break at p_1
+
+Breakpoint 1, 0x0000000000400ee0 in phase_1 ()
+(gdb) disassemble 
+Dump of assembler code for function phase_1:
+=> 0x0000000000400ee0 <+0>:     sub    $0x8,%rsp
+   0x0000000000400ee4 <+4>:     mov    $0x402400,%esi
+   0x0000000000400ee9 <+9>:     callq  0x401338 <strings_not_equal>
+   0x0000000000400eee <+14>:    test   %eax,%eax
+   0x0000000000400ef0 <+16>:    je     0x400ef7 <phase_1+23>
+   0x0000000000400ef2 <+18>:    callq  0x40143a <explode_bomb>
+   0x0000000000400ef7 <+23>:    add    $0x8,%rsp
+   0x0000000000400efb <+27>:    retq 
+
+At fig.3.2 in the book, we know %esi is the 2nd args for strings_not_equal.
+
+(gdb) x/s $esi
+0x402400:       "Border relations with Canada have never been better."
+
+
+2. set break at p_2
+
+Breakpoint 3, 0x0000000000400efc in phase_2 ()
+(gdb) disassemble 
+Dump of assembler code for function phase_2:
+=> 0x0000000000400efc <+0>:     push   %rbp
+   0x0000000000400efd <+1>:     push   %rbx
+   0x0000000000400efe <+2>:     sub    $0x28,%rsp
+   0x0000000000400f02 <+6>:     mov    %rsp,%rsi
+   0x0000000000400f05 <+9>:     callq  0x40145c <read_six_numbers>
+   0x0000000000400f0a <+14>:    cmpl   $0x1,(%rsp)
+   0x0000000000400f0e <+18>:    je     0x400f30 <phase_2+52>
+   0x0000000000400f10 <+20>:    callq  0x40143a <explode_bomb>
+   0x0000000000400f15 <+25>:    jmp    0x400f30 <phase_2+52>
+   0x0000000000400f17 <+27>:    mov    -0x4(%rbx),%eax
+   0x0000000000400f1a <+30>:    add    %eax,%eax
+   0x0000000000400f1c <+32>:    cmp    %eax,(%rbx)
+   0x0000000000400f1e <+34>:    je     0x400f25 <phase_2+41>
+   0x0000000000400f20 <+36>:    callq  0x40143a <explode_bomb>
+   0x0000000000400f25 <+41>:    add    $0x4,%rbx
+   0x0000000000400f29 <+45>:    cmp    %rbp,%rbx
+   0x0000000000400f2c <+48>:    jne    0x400f17 <phase_2+27>
+   0x0000000000400f2e <+50>:    jmp    0x400f3c <phase_2+64>
+   0x0000000000400f30 <+52>:    lea    0x4(%rsp),%rbx
+   0x0000000000400f35 <+57>:    lea    0x18(%rsp),%rbp
+   0x0000000000400f3a <+62>:    jmp    0x400f17 <phase_2+27>
+   0x0000000000400f3c <+64>:    add    $0x28,%rsp
+   0x0000000000400f40 <+68>:    pop    %rbx
+   0x0000000000400f41 <+69>:    pop    %rbp
+   0x0000000000400f42 <+70>:    retq   
+End of assembler dump.
+
+Continuing getting into the read_six_numbers, we get
+(gdb) x/s $esi
+0x4025c3:       "%d %d %d %d %d %d"
+
+So what we need is 6 int. And it will be read from our input string.
+
+1. *($rsp) = 1
+
+$rbx=0x4+$rsp
+$rbp=0x18+$rsp
+
+$eax=*($rbx-0x4)=*($rsp)=1
+$eax=2 * $eax = 2
+
+2. *($rbx)=(0x4+$rsp)=$eax=2
+
+$rbx=$rbx+4
+
+3. *(0x18+$rsp)=*(0x08+$rsp)
+
+$eax=2
+$eax=4
+
+4. *(0x04+$rsp)=4
+
+$rbx=$rsp+0x8
+
+...
+
+so the ans is 1 2 4 8 16 32
+
+
+3. 
+
+$eax = 0
+
+7 <= *($rsp+0x8)
+
+$eax = *($rsp+0x8)
+
+5 0xce
+6 0x2aa
+7 0x147
+
+4.
+
+Breakpoint 2, 0x000000000040100c in phase_4 ()
+(gdb) disassemble 
+Dump of assembler code for function phase_4:
+=> 0x000000000040100c <+0>:     sub    $0x18,%rsp
+   0x0000000000401010 <+4>:     lea    0xc(%rsp),%rcx
+   0x0000000000401015 <+9>:     lea    0x8(%rsp),%rdx
+   0x000000000040101a <+14>:    mov    $0x4025cf,%esi
+   0x000000000040101f <+19>:    mov    $0x0,%eax
+   0x0000000000401024 <+24>:    callq  0x400bf0 <__isoc99_sscan
+   0x0000000000401029 <+29>:    cmp    $0x2,%eax
+   0x000000000040102c <+32>:    jne    0x401035 <phase_4+41>
+   0x000000000040102e <+34>:    cmpl   $0xe,0x8(%rsp)
+   0x0000000000401033 <+39>:    jbe    0x40103a <phase_4+46>
+   0x0000000000401035 <+41>:    callq  0x40143a <explode_bomb>
+   0x000000000040103a <+46>:    mov    $0xe,%edx
+   0x000000000040103f <+51>:    mov    $0x0,%esi
+   0x0000000000401044 <+56>:    mov    0x8(%rsp),%edi
+   0x0000000000401048 <+60>:    callq  0x400fce <func4>
+   0x000000000040104d <+65>:    test   %eax,%eax
+   0x000000000040104f <+67>:    jne    0x401058 <phase_4+76>
+   0x0000000000401051 <+69>:    cmpl   $0x0,0xc(%rsp)
+   0x0000000000401056 <+74>:    je     0x40105d <phase_4+81>
+   0x0000000000401058 <+76>:    callq  0x40143a <explode_bomb>
+   0x000000000040105d <+81>:    add    $0x18,%rsp
+   0x0000000000401061 <+85>:    retq   
+End of assembler dump.
