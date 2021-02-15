@@ -5,6 +5,7 @@
 
 int main(int argc, char *argv[], char *envp[])
 {
+    printf("argc is %d\n", argc);
     printf("CMD args:\n");
     for (int i = 0; argv[i] != NULL; ++i) {
         printf("\targv[%02d]: %s\n", i, argv[i]);
