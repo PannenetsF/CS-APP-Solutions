@@ -72,3 +72,53 @@ main-------p-----Fork-----print-----return----print----exit
 2 
 The child waits until the parent process is done, and do ++counter(1) == 2.
 
+
+## 8.17
+
+main----print----Fork----print----print_exit----print
+                   |-----print----print 
+
+Hello // fixed 
+1
+Bye
+0
+2 // fixed 
+Bye // fixed 
+
+
+Hello // fixed 
+0
+1
+Bye
+2 // fixed 
+Bye // fixed 
+
+
+Hello // fixed 
+1
+0
+Bye
+2 // fixed 
+Bye // fixed 
+
+## 8.18
+
+main--------Fork--------Fork--------print_1--------exit:p
+             |           |----------print_0--------exit:c2
+             |---atexit-Fork--------print_1--------exit:c1   
+                         |----------print_0--------exit:c1c
+
+A: p(print_1) c1(print_1) c1(exit_) c2(print_0) c1c(print_0) c1c(exit_) 
+B: impossible 
+C: p(print_1) c1c(print_0) c1c(exit_) c1(print_1) c1(exit_) c2(print_0) 
+D: impossible 
+E: p(print_1) c2(print_0) c1c(print_0) c1c(exit_) c1(print_1) c1(exit_) 
+
+## 8.19 
+
+fork-n = fork , fork-n-1 
+
+2^n 
+
+## 8.20 
+
