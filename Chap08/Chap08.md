@@ -122,3 +122,15 @@ fork-n = fork , fork-n-1
 
 ## 8.20 
 
+`myls.c`
+
+## 8.21 
+
+bacc
+bcac
+acbc
+abcc
+
+## 8.23 
+
+The sleep gets all `SIGUSR2`. 
